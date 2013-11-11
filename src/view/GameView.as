@@ -4,17 +4,20 @@ package view
 	
 	import interfaces.ControllerInterface;
 	
+	import starling.display.Button;
 	import starling.display.Sprite;
 	import starling.events.Event;
 	
 	public class GameView extends Sprite
 	{
 		private var frameEdge:Number;
-		
 		private var cellCount:Number;
 		private var nodeEdge:Number;
 		private var nodes:Array;
 		private var controller:ControllerInterface;
+		private var easyBtn:Button;
+		private var medBtn:Button;
+		private var hardBtn:Button;
 		
 		public function GameView(controller:ControllerInterface)
 		{
@@ -40,10 +43,27 @@ package view
 		}
 		
 		private function drawScreen():void
-		{				
+		{		
 			var startX:Number = (Constant.Width - this.frameEdge)/2 
+			var startXBtn:Number = startX + this.frameEdge - 100;
+				
+			this.easyBtn = new Button(Assets.EasyT); 
+			this.easyBtn.x = startXBtn;
+			this.easyBtn.y = 50;
+			this.addChild(this.easyBtn);
+			
+			this.medBtn = new Button(Assets.MedT); 
+			this.medBtn.x = startXBtn;
+			this.medBtn.y = 100;
+			this.addChild(this.medBtn);
+			
+			this.hardBtn = new Button(Assets.HardT); 
+			this.hardBtn.x = startXBtn;
+			this.hardBtn.y = 150;
+			this.addChild(this.hardBtn);
+				
 			var addX:Number = startX;
-			var addY:Number = 100;
+			var addY:Number = 200;
 			
 			for ( var i:int=0; i<8; i++ )
 			{
@@ -67,8 +87,18 @@ package view
 		private function nodeHit(event:Event):void
 		{
 			// TODO Auto Generated method stub
-			var btn:MSButton = event.target as MSButton;
-			this.controller.nodeHit(btn);
+			var clicked:Button = event.target as Button;
+			if ( clicked == this.easyBtn)
+				this.controller.newEasyGame();
+			else if ( clicked == this.medBtn)
+				this.controller.newMedGame();
+			else if ( clicked == this.hardBtn)
+				this.controller.newHardGame();
+			else
+			{
+				var btn:MSButton = event.target as MSButton;
+				this.controller.nodeHit(btn);
+			}
 		}
 		
 		

@@ -10,10 +10,12 @@ package
 	
 	import view.GameView;
 	import view.MSButton;
+	import view.MessageView;
 	
 	public class GameController extends Sprite implements ControllerInterface
 	{
 		private var gameView:GameView;
+		private var messageView:MessageView 
 		private var mineData:Array;
 		private var rowOrColumnCount:Number;
 		private var mineCount:Number;
@@ -33,7 +35,7 @@ package
 			trace("starling framework initialialized");
 			
 			this.gameView = new GameView(this);
-			this.addChild(gameView);	
+			this.addChild(this.gameView);	
 		}	
 
 		private function initMines():void
@@ -53,20 +55,55 @@ package
 		}
 		
 		// Controller Interface
+		public function newEasyGame():void
+		{
+			if (this.messageView != null)
+			{
+				this.removeChild(this.messageView);
+				this.messageView = null;
+			}
+			
+			this.addChild(this.gameView);
+			this.gameView = null;
+			this.gameView = new GameView(this);
+			this.addChild(this.gameView);
+			
+			
+			
+		}
+		public function newMedGame():void
+		{
+			if (this.messageView != null)
+			{
+				this.removeChild(this.messageView);
+				this.messageView = null;
+			}
+		}
+		public function newHardGame():void
+		{
+			if (this.messageView != null)
+			{
+				this.removeChild(this.messageView);
+				this.messageView = null;
+			}
+		}
 		
 		public function nodeHit(node:MSButton):void
 		{
 			trace( "buton click i: " + node.i + " j: " + node.j);
 			
 			if (this.mineExists(node))
+			{
 			 	node.upState = Assets.MineT;	
+				this.loose();
+			}
 			else 
-				this.uncoverNode(node.i, node.j);
+				this.uncoverNode(node);
 			
 		}
 		
 		// helper
-		private function uncoverNode(rowIndex:int, colIndex:int):void
+		private function uncoverNode(node:MSButton):void
 		{
 			var count:int = 0;
 			
@@ -76,36 +113,37 @@ package
 					if (i==0 && j==0)
 						continue;
 					
-					var row:int = rowIndex + i;
-					var col:int = colIndex + j;
+					var row:int = node.i + i;
+					var col:int = node.j + j;
 					
 					if ( (row>-1 && row<this.rowOrColumnCount) && 
 						(col>-1 && col<this.rowOrColumnCount) && 
-						this.mineExistsAtIndex(row, col) )
+						this.mineExists(this.gameView.getNode(row, col)) )
 						count++;
 				}
 			
+			node.enabled = false;
+			
 			if (count > 0)
 			{
-				//trace( "check me for i: " + row1 + " j: " + col1);
-				this.gameView.getNode(rowIndex, colIndex).setText(count);
+				node.setText(count);
 			}
 			else
 			{
-				for ( var k:int=-1; k<2; k++ )
-					for ( var l:int=-1; l<2; l++ )
+				for ( i=-1; i<2; i++ )
+					for (j=-1; j<2; j++ )
 					{
-						if (k==0 && l==0)
+						if (i==0 && j==0)
 							continue;
 						
-						var row1:int = rowIndex + k;
-						var col1:int = colIndex + l;
+						row = node.i + i;
+						col = node.j + j;
 						
-						if ( (row1>-1 && row1<this.rowOrColumnCount) && 
-							(col1>-1 && col1<this.rowOrColumnCount) )
+						if ( (row>-1 && row<this.rowOrColumnCount) && 
+							(col>-1 && col<this.rowOrColumnCount) )
 						{
-							trace( "check neighbors for i: " + row1 + " j: " + col1);
-							this.uncoverNode(row1, col1);
+							if ( this.gameView.getNode(row, col).enabled )
+								this.uncoverNode(this.gameView.getNode(row, col));
 						}
 					}
 			}
@@ -120,18 +158,28 @@ package
 			return false;
 		}
 		
-		private function mineExistsAtIndex(i:int, j:int):Boolean
-		{
-			for each (var mn:NodeData in this.mineData) 
-				if (mn.i == i && mn.j == j)
-					return true;
-			
-			return false;
-		}
-		
 		private function randomRange(minNum:Number, maxNum:Number):Number 
 		{
 			return (Math.ceil(Math.random() * (maxNum - minNum)) + minNum);
+		}
+		
+		private function loose():void
+		{
+			if (this.messageView == null)
+				this.messageView = new MessageView();
+			
+			this.messageView.x = this.gameView.x;
+			this.messageView.y = this.gameView.y;
+			this.messageView.width = this.gameView.width;
+			this.messageView.height = this.gameView.height;
+			this.addChild(this.messageView);
+			
+		}
+		
+		private function win():void
+		{
+			
+			
 		}
 		
 	}
