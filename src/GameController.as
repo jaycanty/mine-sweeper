@@ -51,23 +51,23 @@ package
 			{
 				case Constant.MediumGame:
 				{
-					this.rowOrColumnCount = 8;
-					this.mineCount = 10; 
+					this.rowOrColumnCount = Constant.MediumGameRowOrCol;
+					this.mineCount = Constant.MediumGameMineCount; 
 					
 					break;
 				}
 				case Constant.HardGame:
 				{
-					this.rowOrColumnCount = 8;
-					this.mineCount = 10; 
+					this.rowOrColumnCount = Constant.HardGameRowOrCol;
+					this.mineCount = Constant.HardGameMineCount; 
 					
 					break;
 				}
 					
 				default: // EasyGame
 				{
-					this.rowOrColumnCount = 8;
-					this.mineCount = 10; 
+					this.rowOrColumnCount = Constant.EasyGameRowOrCol;
+					this.mineCount = Constant.EasyGameMineCount; 
 					
 					break;
 				}
@@ -79,9 +79,8 @@ package
 				this.gameView = null;
 			}
 				
-			this.gameView = new GameView(this);
+			this.gameView = new GameView(this, type);
 			this.addChild(this.gameView);
-			
 		}
 		
 		public function nodeHit(node:MSButton):void
@@ -108,6 +107,20 @@ package
 			}
 			else 
 				this.uncoverNode(node);
+		}
+		
+		public function nodeDoubleHit(node:MSButton):void
+		{
+			if (node.suspectBomb)
+			{
+				node.suspectBomb = false;
+				node.upState = Assets.NodeT;
+			}
+			else
+			{
+				node.suspectBomb = true;
+				node.upState = Assets.MineSuspectT;
+			}
 		}
 		
 		// helper		
@@ -167,7 +180,9 @@ package
 						count++;
 				}
 			
+			// disable button decrement win count
 			node.enabled = false;
+			node.upState = Assets.NodeT;
 			
 			if (count > 0)
 			{
@@ -202,7 +217,7 @@ package
 		private function loose():void
 		{
 			if (this.messageView == null)
-				this.messageView = new MessageView();
+				this.messageView = new MessageView(Assets.LooseT);
 			
 			this.messageView.x = this.gameView.x;
 			this.messageView.y = this.gameView.y;

@@ -1,7 +1,9 @@
 package view
 {		
+	import flash.text.TextFormat;
 	import flash.utils.getQualifiedClassName;
 	
+	import feathers.controls.Label;
 	import feathers.controls.Radio;
 	import feathers.core.ToggleGroup;
 	import feathers.themes.MetalWorksMobileTheme;
@@ -14,13 +16,14 @@ package view
 	import starling.display.Button;
 	import starling.display.Sprite;
 	import starling.events.Event;
-	import starling.events.TouchEvent;
 	
 	public class GameView extends Sprite
 	{
 		private var frameEdge:Number;
 		private var cellCount:Number;
 		private var nodeEdge:Number;
+		private var gameType:Number;
+		private var mineCount:Number;
 		private var nodes:Array;
 		private var controller:ControllerInterface;
 		private var newBtn:Button;
@@ -28,17 +31,46 @@ package view
 		private var radio1:Radio
 		private var radio2:Radio
 		private var radio3:Radio
+		private var label:Label;
 		
-		public function GameView(controller:ControllerInterface)
+		public function GameView(controller:ControllerInterface, type:Number)
 		{
 			super();
 			Assets.init();
 			this.controller = controller;
+			this.nodes = [];
 			this.addEventListener(starling.events.Event.ADDED_TO_STAGE, onAddedToStage);
 			this.nodeEdge = Assets.NodeT.frame.width;
-			this.cellCount = 8;
+			this.gameType = type;
+			
+			switch(type)
+			{
+				case Constant.MediumGame:
+				{
+					this.cellCount = Constant.MediumGameRowOrCol;
+					this.mineCount = Constant.MediumGameMineCount; 
+					
+					break;
+				}
+				case Constant.HardGame:
+				{
+					this.cellCount = Constant.HardGameRowOrCol;
+					this.mineCount = Constant.HardGameMineCount; 
+					
+					break;
+				}
+					
+				default: // EasyGame
+				{
+					this.cellCount = Constant.EasyGameRowOrCol;
+					this.mineCount = Constant.EasyGameMineCount; 
+					
+					break;
+				}
+			}
+			
 			this.frameEdge = nodeEdge * cellCount;
-			this.nodes = [];
+			
 		}
 		
 		public function getNode(i:int, j:int):MSButton
@@ -46,9 +78,9 @@ package view
 			return this.nodes[i][j] as MSButton;
 		}
 		
+		// private
 		private function onAddedToStage(event:Event):void
 		{
-			trace("game screen initialialized");
 			this.drawScreen();
 		}
 		
@@ -90,14 +122,30 @@ package view
 			radio3.x = startXRadio;
 			radio3.y = 80;
 			this.addChild( radio3 );
+			
+			this.group.selectedIndex = this.gameType;
+			
+			// mine count
+			this.label = new Label();
+			this.label.text = this.mineCount + " mines"
+			this.label.x = startX + this.frameEdge - 70;
+			this.label.y = 50;
 
+			this.addChild(this.label);
+			
+			//label.textRendererProperties.textFormat = new TextFormat( "Arial", 24, 0xff0000 );
+
+//			this.label.textRendererProperties.textFormat = new TextFormat( "Arial", 24, 0x323232 );
+//			this.label.validate();
+			
+			// game grid
 			var addX:Number = startX;
 			var addY:Number = 100;
 			
-			for ( var i:int=0; i<8; i++ )
+			for ( var i:int=0; i<this.cellCount; i++ )
 			{
 				nodes[i] = [];
-				for ( var j:int=0; j<8; j++ )
+				for ( var j:int=0; j<this.cellCount; j++ )
 				{
 					var nodeBtn:MSButton = new MSButton(Assets.NodeT, this.controller, i, j);
 					nodeBtn.x = addX;

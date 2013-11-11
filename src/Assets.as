@@ -12,6 +12,9 @@ package
 		[Embed(source="../media/mine.png")]
 		private static const Mine:Class;
 		
+		[Embed(source="../media/mine_suspect.png")]
+		private static const MineSuspect:Class;
+		
 		[Embed(source="../media/loose.png")]
 		private static const Loose:Class
 		
@@ -24,6 +27,7 @@ package
 		
 		public static var NodeT:Texture;
 		public static var MineT:Texture;
+		public static var MineSuspectT:Texture;
 		public static var LooseT:Texture;
 		public static var WinT:Texture;
 		public static var NewT:Texture;
@@ -35,6 +39,9 @@ package
 			
 			var mineBM:Bitmap = new Assets.Mine as Bitmap;
 			MineT = Texture.fromBitmap(mineBM);
+			
+			var mineSuspectBM:Bitmap = new Assets.MineSuspect as Bitmap;
+			MineSuspectT = Texture.fromBitmap(mineSuspectBM);
 			
 			var looseBM:Bitmap = new Assets.Loose as Bitmap;
 			LooseT = Texture.fromBitmap(looseBM);

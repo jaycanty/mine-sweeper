@@ -14,6 +14,7 @@ package view
 		private var controller:ControllerInterface;
 		private var _i:Number;
 		private var _j:Number;
+		public var suspectBomb:Boolean;
 		
 		public function MSButton(upState:Texture, controller:ControllerInterface, i:Number, j:Number)
 		{
@@ -21,7 +22,6 @@ package view
 			this.controller = controller;
 			this.i = i;
 			this.j = j;
-			
 			this.fontColor = 0xFFFFFF;
 			
 			var tapGesture:TapGesture = new TapGesture(this);
@@ -42,16 +42,14 @@ package view
 		
 		private function onDoubleTap(event:GestureEvent):void
 		{
-			// handle double tap!
-			trace ("DOUBLE TOUCH: " + this.i + " - " + this.j );
+			this.controller.nodeDoubleHit(this);
 		}
 		
 		public function setText(value:int):void
 		{
+			this.upState = Assets.NodeT;
 			this.text = ""+value;
-			
 		}
-		
 		
 		// NodeInterface
 		public function get i():Number
