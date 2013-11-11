@@ -1,4 +1,4 @@
-package
+package data
 {
 	import flash.display.Bitmap;
 	
@@ -6,25 +6,25 @@ package
 
 	public class Assets
 	{
-		[Embed(source="../media/title.png")]
+		[Embed(source="../../media/title.png")]
 		private static const Title:Class;
 		
-		[Embed(source="../media/node.png")]
+		[Embed(source="../../media/node.png")]
 		private static const Node:Class;
 		
-		[Embed(source="../media/mine.png")]
+		[Embed(source="../../media/mine.png")]
 		private static const Mine:Class;
 		
-		[Embed(source="../media/mine_suspect.png")]
+		[Embed(source="../../media/mine_suspect.png")]
 		private static const MineSuspect:Class;
 		
-		[Embed(source="../media/loose.png")]
+		[Embed(source="../../media/loose.png")]
 		private static const Loose:Class
 		
-		[Embed(source="../media/win.png")]
+		[Embed(source="../../media/win.png")]
 		private static const Win:Class
 		
-		[Embed(source="../media/new.png")]
+		[Embed(source="../../media/new.png")]
 		private static const New:Class
 		
 		public static var TitleT:Texture;

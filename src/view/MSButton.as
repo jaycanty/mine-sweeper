@@ -8,6 +8,7 @@ package view
 	
 	import starling.display.Button;
 	import starling.textures.Texture;
+	import data.Assets;
 	
 	public class MSButton extends Button implements NodeInterface
 	{

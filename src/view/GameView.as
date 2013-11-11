@@ -2,6 +2,9 @@ package view
 {		
 	import flash.utils.getQualifiedClassName;
 	
+	import data.Assets;
+	import data.Constant;
+	
 	import feathers.controls.Radio;
 	import feathers.core.ToggleGroup;
 	import feathers.themes.MetalWorksMobileTheme;
@@ -86,6 +89,17 @@ package view
 				this.mineCount++;
 			
 			this.label.text = this.mineCount + "\nmines"
+		}
+		
+		public function disableField():void
+		{
+			for each (var array:Array in this.nodes)
+				for each (var btn:MSButton in array)
+				{
+					btn.upState = Assets.NodeT;
+					btn.enabled = false;
+				}
+			
 		}
 		
 		// private

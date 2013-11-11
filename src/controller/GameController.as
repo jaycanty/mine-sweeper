@@ -1,4 +1,4 @@
-package
+package controller
 {
 	import interfaces.ControllerInterface;
 	import interfaces.NodeInterface;
@@ -11,6 +11,8 @@ package
 	import view.GameView;
 	import view.MSButton;
 	import view.MessageView;
+	import data.Assets;
+	import data.Constant;
 	
 	public class GameController extends Sprite implements ControllerInterface
 	{
@@ -229,19 +231,16 @@ package
 		
 		private function gameOver(win:Boolean):void
 		{
+			this.gameView.disableField();
 			this.uncoverMines();
 			
 			if (this.messageView == null)
 			{
 				if (win)
-					this.messageView = new MessageView(Assets.WinT);
+					this.messageView = new MessageView(Assets.WinT, (Constant.Width - this.rowOrColumnCount * 30)/2 );
 				else
-					this.messageView = new MessageView(Assets.LooseT);
+					this.messageView = new MessageView(Assets.LooseT, (Constant.Width - this.rowOrColumnCount * 30)/2);
 			}
-			this.messageView.x = this.gameView.x;
-			this.messageView.y = this.gameView.y;
-			this.messageView.width = this.gameView.width;
-			this.messageView.height = this.gameView.height;
 			this.addChild(this.messageView);
 			
 		}

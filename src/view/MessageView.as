@@ -1,5 +1,7 @@
 package view
 {
+	import data.Constant;
+	
 	import interfaces.ControllerInterface;
 	
 	import starling.display.Image;
@@ -11,11 +13,13 @@ package view
 	{
 		private var image:Image;
 		private var texture:Texture;
+		private var x:Number;
 		
-		public function MessageView(texture:Texture)
+		public function MessageView(texture:Texture, x:Number)
 		{
 			super();
 			this.texture = texture;
+			this.x = x;
 			this.addEventListener(starling.events.Event.ADDED_TO_STAGE, onAddedToStage);
 		}
 		
@@ -23,8 +27,8 @@ package view
 		{
 			trace("message screen initialialized");
 			this.image = new Image(this.texture);
-			this.image.x = (Constant.Width - this.image.width)/2; 
-			this.image.y = 200;
+			this.image.x = this.x - 10; 
+			this.image.y = 10;
 			this.addChild(this.image);
 		}
 		
