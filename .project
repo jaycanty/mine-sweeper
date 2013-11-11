@@ -16,7 +16,22 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>[source path] src</name>
+			<name>[source path] Gestouch-src</name>
+			<type>2</type>
+			<location>/Users/jj/Desktop/as/Gestouch/src</location>
+		</link>
+		<link>
+			<name>[source path] MetalWorksMobileTheme-source</name>
+			<type>2</type>
+			<location>/Users/jj/Desktop/as/feathers-1.1.1/themes/MetalWorksMobileTheme/source</location>
+		</link>
+		<link>
+			<name>[source path] feathers-1.1.1-source</name>
+			<type>2</type>
+			<location>/Users/jj/Desktop/as/feathers-1.1.1/source</location>
+		</link>
+		<link>
+			<name>[source path] starling-src</name>
 			<type>2</type>
 			<location>/Users/jj/Desktop/as/PrimaryFeather-Starling-Framework-1a50854/starling/src</location>
 		</link>

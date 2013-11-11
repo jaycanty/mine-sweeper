@@ -18,7 +18,7 @@ package view
 		
 		private function onAddedToStage(event:Event):void
 		{
-			trace("game screen initialialized");
+			trace("message screen initialialized");
 			this.image = new Image(Assets.LooseT);
 			this.image.x = (Constant.Width - this.image.width)/2; 
 			this.image.y = 200;
