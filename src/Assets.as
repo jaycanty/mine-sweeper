@@ -6,6 +6,9 @@ package
 
 	public class Assets
 	{
+		[Embed(source="../media/title.png")]
+		private static const Title:Class;
+		
 		[Embed(source="../media/node.png")]
 		private static const Node:Class;
 		
@@ -24,7 +27,7 @@ package
 		[Embed(source="../media/new.png")]
 		private static const New:Class
 		
-		
+		public static var TitleT:Texture;
 		public static var NodeT:Texture;
 		public static var MineT:Texture;
 		public static var MineSuspectT:Texture;
@@ -34,6 +37,9 @@ package
 		
 		public static function init():void
 		{
+			var titleBM:Bitmap = new Assets.Title as Bitmap;
+			TitleT = Texture.fromBitmap(titleBM);
+			
 			var nodeBM:Bitmap = new Assets.Node as Bitmap;
 			NodeT = Texture.fromBitmap(nodeBM);
 			

@@ -1,9 +1,7 @@
 package view
 {		
-	import flash.text.TextFormat;
 	import flash.utils.getQualifiedClassName;
 	
-	import feathers.controls.Label;
 	import feathers.controls.Radio;
 	import feathers.core.ToggleGroup;
 	import feathers.themes.MetalWorksMobileTheme;
@@ -14,6 +12,7 @@ package view
 	import org.gestouch.gestures.TapGesture;
 	
 	import starling.display.Button;
+	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Event;
 	
@@ -26,12 +25,13 @@ package view
 		private var mineCount:Number;
 		private var nodes:Array;
 		private var controller:ControllerInterface;
+		private var title:Image;
 		private var newBtn:Button;
 		private var group:ToggleGroup;
 		private var radio1:Radio
 		private var radio2:Radio
 		private var radio3:Radio
-		private var label:Label;
+		private var label:MSLabel;
 		
 		public function GameView(controller:ControllerInterface, type:Number)
 		{
@@ -78,6 +78,16 @@ package view
 			return this.nodes[i][j] as MSButton;
 		}
 		
+		public function changeMineCount(less:Boolean):void
+		{
+			if (less)
+				this.mineCount--;
+			else
+				this.mineCount++;
+			
+			this.label.text = this.mineCount + "\nmines"
+		}
+		
 		// private
 		private function onAddedToStage(event:Event):void
 		{
@@ -85,12 +95,17 @@ package view
 		}
 		
 		private function drawScreen():void
-		{		
+		{	
 			var startX:Number = (Constant.Width - this.frameEdge)/2 
+			
+			this.title = new Image(Assets.TitleT);
+			this.title.x = startX; 
+			this.title.y = 10;
+			this.addChild(this.title);
 				
 			this.newBtn = new Button(Assets.NewT); 
 			this.newBtn.x = startX;
-			this.newBtn.y = 50;
+			this.newBtn.y = this.title.y + this.title.height + 10;
 			this.addChild(this.newBtn);
 			
 			var tapGesture:TapGesture = new TapGesture(this.newBtn);
@@ -106,41 +121,35 @@ package view
 			radio1.label = "Easy";
 			radio1.toggleGroup = group;	
 			radio1.x = startXRadio;
-			radio1.y = 50;
+			radio1.y = this.title.y + this.title.height + 10;
 			this.addChild( radio1 );
 			
 			this.radio2 = new Radio();
 			radio2.label = "Medium";
 			radio2.toggleGroup = group;
 			radio2.x = startXRadio;
-			radio2.y = 65;
+			radio2.y = this.title.y + this.title.height + 25;
 			this.addChild( radio2 );
 			
 			this.radio3 = new Radio();
 			radio3.label = "Hard";
 			radio3.toggleGroup = group;
 			radio3.x = startXRadio;
-			radio3.y = 80;
+			radio3.y = this.title.y + this.title.height + 40;
 			this.addChild( radio3 );
 			
 			this.group.selectedIndex = this.gameType;
 			
 			// mine count
-			this.label = new Label();
-			this.label.text = this.mineCount + " mines"
-			this.label.x = startX + this.frameEdge - 70;
-			this.label.y = 50;
-
+			this.label = new MSLabel();
+			this.label.text = this.mineCount + "\nmines"
+			this.label.x = startX + this.frameEdge - 60;
+			this.label.y =  this.title.y + this.title.height + 10;
 			this.addChild(this.label);
-			
-			//label.textRendererProperties.textFormat = new TextFormat( "Arial", 24, 0xff0000 );
-
-//			this.label.textRendererProperties.textFormat = new TextFormat( "Arial", 24, 0x323232 );
-//			this.label.validate();
 			
 			// game grid
 			var addX:Number = startX;
-			var addY:Number = 100;
+			var addY:Number = this.title.y + this.title.height + 60;
 			
 			for ( var i:int=0; i<this.cellCount; i++ )
 			{

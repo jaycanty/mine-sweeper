@@ -17,6 +17,7 @@ package
 		private var gameView:GameView;
 		private var messageView:MessageView 
 		private var mineData:Array;
+		private var uncoveredNodes:Number;
 		private var rowOrColumnCount:Number;
 		private var mineCount:Number;
 		private var initialNode:NodeInterface;
@@ -81,6 +82,8 @@ package
 				
 			this.gameView = new GameView(this, type);
 			this.addChild(this.gameView);
+			
+			this.uncoveredNodes = this.rowOrColumnCount * this.rowOrColumnCount - this.mineCount;
 		}
 		
 		public function nodeHit(node:MSButton):void
@@ -103,7 +106,7 @@ package
 			else if (this.mineExists(node))
 			{
 			 	node.upState = Assets.MineT;	
-				this.loose();
+				this.gameOver(false);
 			}
 			else 
 				this.uncoverNode(node);
@@ -115,11 +118,13 @@ package
 			{
 				node.suspectBomb = false;
 				node.upState = Assets.NodeT;
+				this.gameView.changeMineCount(false);
 			}
 			else
 			{
 				node.suspectBomb = true;
 				node.upState = Assets.MineSuspectT;
+				this.gameView.changeMineCount(true);
 			}
 		}
 		
@@ -181,8 +186,16 @@ package
 				}
 			
 			// disable button decrement win count
-			node.enabled = false;
-			node.upState = Assets.NodeT;
+			if (node.suspectBomb)
+			{
+				node.upState = Assets.NodeT;
+				this.gameView.changeMineCount(false);
+			}
+			node.enabled = false;	
+			this.uncoveredNodes--;
+			trace("Uncovered: " + this.uncoveredNodes);
+			if (this.uncoveredNodes == 0)
+				this.gameOver(true);
 			
 			if (count > 0)
 			{
@@ -214,11 +227,17 @@ package
 			return (Math.ceil(Math.random() * (maxNum - minNum)) + minNum);
 		}
 		
-		private function loose():void
+		private function gameOver(win:Boolean):void
 		{
-			if (this.messageView == null)
-				this.messageView = new MessageView(Assets.LooseT);
+			this.uncoverMines();
 			
+			if (this.messageView == null)
+			{
+				if (win)
+					this.messageView = new MessageView(Assets.WinT);
+				else
+					this.messageView = new MessageView(Assets.LooseT);
+			}
 			this.messageView.x = this.gameView.x;
 			this.messageView.y = this.gameView.y;
 			this.messageView.width = this.gameView.width;
@@ -227,9 +246,13 @@ package
 			
 		}
 		
-		private function win():void
+		private function uncoverMines():void
 		{
-			
+			for each(var mine:NodeData in this.mineData)
+			{
+				var btn:MSButton = this.gameView.getNode(mine.i, mine.j);
+				btn.upState = Assets.MineT;
+			}
 			
 		}
 		
